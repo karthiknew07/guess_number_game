@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify, session, render_template
 import random
 
 app = Flask(__name__)
-app.secret_key = "920-380-714"  # needed for session storage , enter your key
+app.secret_key = ("SECRET_KEY", "dev-secret") # needed for session storage , enter your key
 
 # Serve the HTML page
 @app.route("/")
