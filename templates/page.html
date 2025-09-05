@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-  <h1>Guess the Number Game</h1>
+  <h1>🎲 Guess the Number Game</h1>
   <button id="startBtn" onclick="startGame()">Start Game</button>
 
   <div id="game" style="display:none;">
@@ -20,76 +20,11 @@
       <div class="progress-bar" id="progressBar"></div>
     </div>
 
-    <!-- Restart button (hidden at first) -->
+    <!-- Restart button -->
     <button id="restartBtn" onclick="restartGame()" style="display:none;">Restart Game</button>
   </div>
 
-  <script>
-    const maxAttempts = 10;
-
-    function startGame() {
-      fetch('/start', { method: 'POST' })
-        .then(res => res.json())
-        .then(data => {
-          document.getElementById('game').style.display = 'block';
-          document.getElementById('result').innerText = data.message;
-          document.getElementById('attempts').innerText = "Attempts: 0";
-          document.getElementById('guessInput').value = '';
-          document.getElementById('progressBar').style.width = '0%';
-          document.getElementById('startBtn').disabled = true;
-          document.getElementById('restartBtn').style.display = 'none';
-        });
-    }
-
-    function makeGuess() {
-      const guess = document.getElementById('guessInput').value;
-      fetch('/guess', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ guess: guess })
-      })
-      .then(res => res.json())
-      .then(data => {
-        const resultEl = document.getElementById('result');
-        resultEl.innerText = data.result;
-        resultEl.className = "";
-
-        if (data.result.includes("Too low")) {
-          resultEl.classList.add("result-low");
-        } else if (data.result.includes("Too high")) {
-          resultEl.classList.add("result-high");
-        } else if (data.result.includes("Correct")) {
-          resultEl.classList.add("result-correct");
-        }
-
-        document.getElementById('attempts').innerText = "Attempts: " + data.attempts;
-        updateProgress(data.attempts);
-
-        // Show restart if game is over
-        if (data.game_over) {
-          document.getElementById('restartBtn').style.display = 'block';
-          document.getElementById('guessInput').disabled = true;
-        }
-      });
-    }
-
-    function restartGame() {
-      fetch('/start', { method: 'POST' })
-        .then(res => res.json())
-        .then(data => {
-          document.getElementById('result').innerText = data.message;
-          document.getElementById('attempts').innerText = "Attempts: 0";
-          document.getElementById('guessInput').value = '';
-          document.getElementById('guessInput').disabled = false;
-          document.getElementById('progressBar').style.width = '0%';
-          document.getElementById('restartBtn').style.display = 'none';
-        });
-    }
-
-    function updateProgress(attempts) {
-      const progressPercent = (attempts / maxAttempts) * 100;
-      document.getElementById('progressBar').style.width = progressPercent + '%';
-    }
-  </script>
+  <!-- External JS -->
+  <script src="/static/script.js"></script>
 </body>
 </html>
